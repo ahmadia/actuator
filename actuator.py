@@ -15,8 +15,8 @@ from IPython.core.debugger import Tracer; debug_here = Tracer()
 ### CONFIGURATION/CALIBRATION DATA ###
 ######################################
 
-INPREFIX='/Users/aron/Desktop/experiment/DSC_'
-OUTPREFIX='/Users/aron/Desktop/experiment/'
+INPREFIX='./input/DSC_'
+OUTPREFIX='./output/'
 
 # Set these as needed by examining an individual frame
 # some helpful commands
@@ -97,8 +97,12 @@ def process_dir():
     starttime = get_exif_datetime(frame0)
     filename = os.path.split(frame0)[-1]
     img = io.imread(frame0)
-    io.imsave(OUTPREFIX+'reference_'+filename,img)
+    outfile = OUTPREFIX+'reference_'+filename
+    io.imsave(outfile,img)
+    print("Saved reference image to " + outfile)
     del img
+
+    print("Saving cropped files to " + OUTPREFIX)
 
     for frame in frames:
         pressure[idx] = process_frame(frame)
@@ -114,6 +118,12 @@ if __name__ == '__main__':
 
     import pylab
     plt.plot(time,pressure)
+    plt.title('Actuator response')
+    plt.xlabel('time(s)')
+    plt.ylabel('pressure (cm)')
+    outfile = OUTPREFIX+'pressure.png'
+    plt.savefig(outfile)
+    print("Saved pressure plot to " + outfile)
 
 #    filename='/Users/aron/Desktop/experiment/DSC_1423.JPG'
 #    pressure_cm = process_frame(filename)
